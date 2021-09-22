@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>懒加载</title>
+</head>
+<body>
+
+    <div id="wrap">
+    </div>
+    <div class="main">
+        <div class="zw">
+            懒加载
+        </div>
+
+        <div class="lazy-loaded" >
+            未加载 等待入屏...
+            <template>
+                <div class="box" style="background-color: #6ab04c;">
+                    A
+                </div>
+            </template>
+        </div>
+
+        <div class="lazy-loaded">
+            未加载 等待入屏...
+            <template>
+                <div class="box" style="background-color:#e056fd;">
+                    B
+                </div>
+            </template>
+        </div>
+        <div class="lazy-loaded">
+            未加载 等待入屏...
+            <template>
+                <div class="box" style="background-color: #30336b;">
+                    C
+                </div>
+            </template>
+        </div>
+        <div class="lazy-loaded">
+            未加载 等待入屏...
+            <template>
+                <div class="box" style="background-color:#eb4d4b;">
+                    D
+                </div>
+            </template>
+        </div>
+
+    </div>
+</body>
+<script>
+    function query (selector){
+        return Array.from(document.querySelectorAll(selector))
+    }
+
+    const options = {
+        rootMargin:"-200px"
+    }
+
+    const io = new IntersectionObserver((changes)=>{
+        changes.forEach(change=>{
+            //进入网页会触发一次
+            if(change.isIntersecting){
+
+                const container = change.target
+
+                const content = container.querySelector('template').innerHTML
+
+                container.innerHTML = content
+                io.unobserve(container)
+            }
+        })
+    },options)
+
+
+    query(".lazy-loaded").forEach(item=>{
+        io.observe(item)
+    })
+
+
+
+</script>
+<style>
+    *{
+        margin:0;
+        padding:0;
+    }
+    body{
+        background-color: #ecf0f1;
+    }
+
+    #wrap{
+        position: fixed;
+        border: #6ab04c solid 4px;
+        top: 200px;
+        bottom: 200px;
+        left: 200px;
+        right: 200px;
+    }
+
+    .main{
+        margin:200px;
+    }
+
+    .zw{
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 100px;
+        color: #badc58;
+    }
+    .lazy-loaded{
+        height:220px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 40px;
+        color: #eb4d4b;
+    }
+    .box   {
+        width: 200px;
+        height: 200px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 90px;
+        color: #dff9fb;
+        margin: 10px auto;
+    }
+</style>
+</html>
