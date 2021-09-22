@@ -5,54 +5,58 @@
     <title>交叉观察器</title>
 </head>
 <body>
-    <div class="top">
-    </div>
 
     <div id="wrap">
     </div>
-    <div class="beingOb">
-        <div class="ob1">123</div>
+    <div class="main">
+        <div class="ob ob1"></div>
+        <div class="ob "></div>
+        <div class="ob "></div>
+        <div class="ob "></div>
+        <div class="ob "></div>
+        <div class="ob "></div>
+        <div class="ob "></div>
+        <div class="ob "></div>
+        <div class="ob "></div>
     </div>
 </body>
 <script>
-   const topBar = document.querySelector(".top")
 
-   function Visible(){
-       topBar.innerHTML = 'Visible'
-       topBar.style.backgroundColor ="#2ecc71"
-   }
-
-   function Invisible(){
-       topBar.innerHTML = 'Invisible'
-       topBar.style.backgroundColor ="#e74c3c"
-   }
-
-   Invisible()
+    const obList = document.querySelectorAll('.ob')
 
    /*
    *  intersectionObserver
    * */
 
-   const root = document.querySelector("#wrap")
    const ob1 = document.querySelector('.ob1')
    const callback = ( entries ) => {
        // entries 是一个数组
-       console.log(entries)
        entries.forEach(v=>{
-           // console.log(v.isIntersecting)
-           console.log(v)
+           v.target.innerHTML = `
+           isIntersecting:${v.isIntersecting} <br>
+           intersectionRatio:${Math.floor(v.intersectionRatio*100)}%
+           `
+           if(v.intersectionRatio === 1){
+               v.target.style.backgroundColor = "#2980b9"
+           }else{
+                   v.target.style.backgroundColor = "#3498db"
+           }
        })
    }
 
+
    const options = {
-       root,
+       rootMargin:"-200px",
+       threshold:[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1]
    }
 
 
    const io = new IntersectionObserver(callback,options)
 
    //开始观察
-   io.observe(ob1)
+    obList.forEach(v=>{
+        io.observe(v)
+    })
 
 
 </script>
@@ -61,40 +65,39 @@
         margin:0;
         padding:0;
     }
-    .top{
-        height: 60px;
-        background-color: #e74c3c;
-        color:#ecf0f1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 30px;
-        position: fixed;
-        top: 0;
-        right: 0;
-        left: 0;
-        z-index: 999;
+    body{
+        background-color: #ecf0f1;
     }
 
     #wrap{
         position: fixed;
-        width: 60%;
-        height: 50vh;
         border: #9b59b6 solid 4px;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%,-50%);
+        top: 200px;
+        bottom: 200px;
+        left: 200px;
+        right: 200px;
     }
 
-    .beingOb{
-        margin: 60px 20% 0 20%;
-        width: 60%;
-        height: 3000px;
+    .main{
+        margin:200px;
+        height: 4000px;
     }
-    .ob1{
+
+    .ob{
+        margin-top: 40px;
         width:100% ;
-        height: 1090px;
-        background-color: #bfa;
+        height: 200px;
+        background-color: #3498db;
+        font-size: 30px;
+        color: #ecf0f1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
+
+    .ob1{
+        margin-top: 1200px;
+    }
+
 </style>
 </html>

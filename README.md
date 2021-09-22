@@ -113,7 +113,8 @@ const io = new IntersectionObserver(
 ![](pic/2.png)  
 
 上图中，灰色的水平方框代表视口，深红色的区域代表四个被观察的目标元素。它们各自的 `intersectionRatio` 图中都已经注明。  
-我也写了一个 Demo ，演示 `IntersectionObserverEntry`对象。
+我也写了一个 [Demo](demo2.html) ，演示 `IntersectionObserverEntry`对象。注意，这个Demo只能在Chrome51+ 运行。
 
-
-root 必须是父级元素
+### 4.实例：惰性加载 (lazy load)
+有时，我们希望某些静态资源（比如图片），只有用户向下滚动，他们进入视口时才加载，这样可以节省带宽，提高网页性能，即"懒加载"。  
+有了 IntersectionObserver API ，实现起来就很容易了。
