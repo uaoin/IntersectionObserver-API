@@ -53,7 +53,7 @@ nodeList.forEach(element=>{
 
 ### 2. callback
 目标元素的可见性变化时，就会调用观察器的回调函数`callback`。
-`callback`第一次进入网页时会触发一次外，还有两种触发的情况。  
+`callback`在默认情况下（没有指定threshold），第一次进入网页时会触发一次外，还有两种触发的情况。  
 
 - 目标元素刚刚进入视口（从不可见变为可见）
 - 目标元素完全离开视口（开始不可见）  
@@ -120,6 +120,7 @@ const io = new IntersectionObserver(
 ### 4. 实例：惰性加载 (lazy load)
 有时，我们希望某些静态资源（比如图片），只有用户向下滚动，他们进入视口时才加载，这样可以节省带宽，提高网页性能，即"懒加载"。  
 有了 IntersectionObserver API ，实现起来就很容易了。
+
 ```javascript
 function query(selector) {
   return Array.from(document.querySelectorAll(selector));
@@ -167,6 +168,7 @@ intersectionObserver.observe(
 ### 6. option 对象
 #### 6.1 threshold属性
 `threshold`属性决定了什么时候触发回调函数。它是一个数组，每个成员都是一个门槛值，默认为`[0]`，即交叉比例（`intersectionRatio`）达到`0`时触发回调函数。
+
 ```javascript
 new IntersectionObserver(
   entries => {/* ... */}, 
@@ -191,7 +193,7 @@ var observer = new IntersectionObserver(
   callback,
   opts
 );
-```  
+```
 上面代码中，除了`root`属性，还有`rootMargin`属性。后者定义根元素的`margin`，用来扩展或缩小`rootBounds`这个矩形的大小，从而影响`intersectionRect`交叉区域的大小。它使用CSS的定义方法，比如`10px 20px 30px 40px`，表示 top、right、bottom 和 left 四个方向的值。
 
 这样设置以后，不管是窗口滚动或者容器内滚动，只要目标元素可见性变化，都会触发观察器。  
@@ -200,5 +202,4 @@ var observer = new IntersectionObserver(
 IntersectionObserver API 是异步的，不随着目标元素的滚动同步触发。
 
 规格写明，`IntersectionObserver`的实现，应该采用`requestIdleCallback()`，即只有线程空闲下来，才会执行观察器。这意味着，这个观察器的优先级非常低，只在其他任务执行完，浏览器有了空闲才会执行。
-
 
