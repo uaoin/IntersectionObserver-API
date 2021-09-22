@@ -115,6 +115,8 @@ const io = new IntersectionObserver(
 上图中，灰色的水平方框代表视口，深红色的区域代表四个被观察的目标元素。它们各自的 `intersectionRatio` 图中都已经注明。  
 我也写了一个 [Demo](demo2.html) ，演示 `IntersectionObserverEntry`对象。注意，这个Demo只能在Chrome51+ 运行。
 
+> 此demo希望完整演示API的工作,让大家感受到变化,故将根元素的矩形区域限制为页面中央的方框里，下同。
+
 ### 4. 实例：惰性加载 (lazy load)
 有时，我们希望某些静态资源（比如图片），只有用户向下滚动，他们进入视口时才加载，这样可以节省带宽，提高网页性能，即"懒加载"。  
 有了 IntersectionObserver API ，实现起来就很容易了。
@@ -140,7 +142,7 @@ query('.lazy-loaded').forEach(function (item) {
   observer.observe(item);
 });
 ```
-效果见[Demo](demo3.html)
+效果见[Demo(懒加载)](demo3.html)
 
 ### 5. 实例：无限滚动
 无限滚动 (infinite scroll) 的实现也很简单。
@@ -159,6 +161,8 @@ intersectionObserver.observe(
 );
 ```
 无限滚动时，最好在页面底部有一个页尾栏（又称sentinels）。一旦页尾栏可见，就表示用户到达了页面底部，从而加载新的条目放在页尾栏前面。这样做的好处是，不需要再一次调用`observe()`方法，现有的`IntersectionObserver`可以保持使用。
+效果见[Demo(无限滚动)](demo4.html)
+
 
 ### 6. option 对象
 #### 6.1 threshold属性
@@ -196,3 +200,7 @@ var observer = new IntersectionObserver(
 IntersectionObserver API 是异步的，不随着目标元素的滚动同步触发。
 
 规格写明，`IntersectionObserver`的实现，应该采用`requestIdleCallback()`，即只有线程空闲下来，才会执行观察器。这意味着，这个观察器的优先级非常低，只在其他任务执行完，浏览器有了空闲才会执行。
+
+
+
+> 本文照抄[阮一峰的这篇文章](https://www.ruanyifeng.com/blog/2016/11/intersectionobserver_api.html) 本人只是修改了几处错误并且写了几个小demo

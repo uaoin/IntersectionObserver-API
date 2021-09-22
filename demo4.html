@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>无限滚动</title>
+</head>
+<body>
+
+<div id="wrap">
+</div>
+<div class="main">
+    <div class="zw">
+        无限滚动
+    </div>
+
+    <div id="boxes">
+
+    </div>
+
+    <template>
+        <div class="box">
+            1
+        </div>
+    </template>
+
+
+    <div class="scrollerFooter">
+        到底了
+    </div>
+</div>
+</body>
+<script>
+
+    const color = [
+        '#ef5777',
+        '#575fcf',
+        '#4bcffa',
+        '#34e7e4',
+        '#0be881',
+        '#ffc048',
+        '#ffdd59',
+        '#ff5e57',
+        '#d2dae2',
+        '#485460',
+        '#f53b57',
+        '#3c40c6',
+        '#0fbcf9',
+        '#00d8d6',
+        '#05c46b',
+        '#ffa801',
+        '#ffd32a',
+        '#ff3f34',
+        '#808e9b',
+        '#1e272e'
+    ]
+
+    const main = document.querySelector('#boxes')
+    const template = document.querySelector('template')
+
+    function colorCal(i){
+        if(i<color.length){
+            return color[i]
+        }else{
+            return color[i%color.length]
+        }
+    }
+
+    let count = 0
+
+    function insertBoxes(times=1){
+        for(let i = 0 ; i<times;i++){
+            let container = main
+            let content = template.content.cloneNode(true)
+            content.children[0].style.backgroundColor = colorCal(count)
+            content.children[0].innerHTML = count.toString()
+            container.appendChild(content)
+            count++
+        }
+    }
+
+
+    //一开始加载两个
+    insertBoxes(2)
+
+    const options = {
+        rootMargin:"-200px"
+    }
+
+    function callback(entries){
+        if(entries[0].isIntersecting){
+            //触发加载两个 当然你也可以写一百个
+            insertBoxes(2)
+            console.log('loaded new items')
+        }
+    }
+
+    const io = new IntersectionObserver(callback,options)
+
+    io.observe(
+        document.querySelector('.scrollerFooter')
+    )
+
+</script>
+<style>
+    *{
+        margin:0;
+        padding:0;
+    }
+    body{
+        background-color: #ecf0f1;
+    }
+
+    #wrap{
+        position: fixed;
+        border: #f5cd79 solid 4px;
+        top: 200px;
+        bottom: 200px;
+        left: 200px;
+        right: 200px;
+    }
+
+    .main{
+        margin:200px;
+    }
+
+    .zw{
+        height: 60vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 100px;
+        color: #badc58;
+    }
+    .lazy-loaded{
+        height:220px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 40px;
+        color: #eb4d4b;
+    }
+    .box   {
+        width: 200px;
+        height: 200px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 90px;
+        color: #dff9fb;
+        margin: 10px auto;
+    }
+    .scrollerFooter{
+        text-align: center;
+        margin: 10px;
+        font-size: 20px;
+    }
+</style>
+</html>
